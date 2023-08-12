@@ -1,0 +1,185 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat,wght@1,300&family=Roboto&display=swap');
+
+.fullLogin{
+    height: 100vh;
+    width: 100vw;
+    display: grid;
+    place-content: center;
+    background-color: #010409;
+}
+
+.loginSection{
+    padding: 1rem;
+    background-color: #0D1117;
+    width: clamp(150px,50vw,450px);
+    height: clamp(150px,50vw,450px);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    text-align: center;
+    box-shadow: 1px 2px 5px #000910;
+}
+
+.headings p {
+    color: rgb(173, 171, 171);
+    font-size: 1.1rem;
+}
+
+.headingLogin{
+    font-family: 'Montserrat', sans-serif;
+    color: white;
+    font-weight: 200;
+    font-size: 2rem;
+}
+
+.loginForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 220px;
+    color: rgb(173, 171, 171);
+}
+
+input{
+    outline: none;
+    border: 2px solid rgb(8, 94, 165);
+    border-radius: 15px;
+    background-color: #00121f;
+    color: white;
+    width: 100%;
+    height: 2rem;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+.links{
+    display: flex;
+    gap: 1rem;
+    color: rgb(173, 171, 171);
+    font-size: 1.1rem;
+}
+
+a:any-link{
+    color: rgb(173, 171, 171);
+}
+
+a:focus,a:hover{
+    color: rgb(208, 202, 202);
+}
+
+.loginButton{
+    background-color: transparent;
+    color: white;
+    border: solid 2px rgb(60, 157, 60);
+    width: 55%;
+    height: 18%;
+    border-radius: 20px;
+    font-size: 1.3rem;
+    font-style: 'Roboto', sans-serif;
+}
+
+.loginButton:hover,.loginButton:focus{
+    background-color: #010409;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 830px){
+    .headings p {
+        font-size: 1rem;
+    }
+    .links{
+        font-size: 1rem;
+    }
+    
+    .headingLogin{
+        font-size: 1.5rem;
+    }
+    .loginButton{
+        font-size: 1.2rem;
+    }
+}
+
+@media screen and (max-width: 690px){
+    .headings p {
+        font-size: 0.85rem;
+    }
+    
+    .headingLogin{
+        font-size: 1.30rem;
+    }
+    .loginButton{
+        font-size: 1.05rem;
+    }
+    .links{
+        font-size: 0.80rem;
+    }
+    .loginSection{
+        gap: 1.3rem;
+        height: clamp(150px,60vw,450px);
+    }
+    input{
+        height: 1.9rem;
+        font-size: 1.05rem;
+    }
+}
+
+@media screen and (max-width: 540px){
+    .headings p {
+        font-size: 0.85rem;
+    }
+    
+    .headingLogin{
+        font-size: 1.30rem;
+    }
+    .loginButton{
+        font-size: 1.05rem;
+    }
+    .links{
+        font-size: 0.80rem;
+        gap: 0rem;
+        flex-wrap: wrap;
+    }
+    .loginSection{
+        gap: 0.9rem;
+        height: clamp(150px,93vw,450px);
+        width: clamp(150px,60vw,450px);
+        padding: 0;
+    }
+    input{
+        height: 1.9rem;
+        font-size: 1rem;
+    }
+}
+@media screen and (max-width: 300px){
+    .headings p {
+        font-size: 0.8rem;
+    }
+    
+    .headingLogin{
+        font-size: 1.10rem;
+    }
+    .loginButton{
+        font-size: 1rem;
+    }
+    .links{
+        font-size: 0.9rem;
+        gap: 0rem;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+    }
+    .loginSection{
+        gap: 0.7rem;
+        height: clamp(150px,120vw,450px);
+        width: clamp(150px,70vw,450px);
+        padding: 0;
+    }
+    input{
+        height: 1.8rem;
+        font-size: 0.8rem;
+        width: 85%;
+    }
+}
