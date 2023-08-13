@@ -13,7 +13,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     email,
     password,
   });
-
+  
   sendToken(user, 201, res);
 });
 
