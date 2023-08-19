@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import '../styles/userlogin.css';
+import '../../styles/userlogin.css';
 import {ToastContainer, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { loginRoute } from '../api/APIRoutes';
-import axios from 'axios';
+import {useDispatch, useSelector} from 'react-redux';
+import { loginUser } from '../../Store/UserSlice';
+import { clearError } from '../../Store/UserSlice';
 
 const UserLogin = () => {
     const navigate = useNavigate();
@@ -19,20 +20,33 @@ const UserLogin = () => {
         theme: "dark"
     }
 
+
+    const{loading,error} = useSelector((state) => state.user);
+
+    useEffect(() => {
+        if (error) {
+          toast.error(error, toastOptions);
+          dispatch(clearError());
+        }
+      }, [error]);
+
+
+    const dispatch = useDispatch();
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(handleValidation()){
-            const {data} = await axios.post(loginRoute,{
+            let userCredentials = {
                 name,
                 password
+            }
+            dispatch(loginUser(userCredentials)).then((result)=>{
+                if(result.payload){
+                    setName("");
+                    setPassword("");
+                    navigate("/");
+                }
             });
-            if(data.status === false){
-                toast.error(data.msg,toastOptions);
-            }
-            else{
-                localStorage.setItem("chat-app-user",JSON.stringify(data.user));
-                navigate("/");
-            }
+
         }
     };
 

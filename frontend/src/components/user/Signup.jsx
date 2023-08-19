@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect} from 'react'
 import { Link, useNavigate } from 'react-router-dom';
-import '../styles/signup.css';
+import '../../styles/signup.css';
 import {ToastContainer, toast} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from 'axios';
-import { signupRoute } from '../api/APIRoutes';
+import {useDispatch, useSelector} from 'react-redux';
+import { signupUser } from '../../Store/UserSlice';
+import { clearError } from '../../Store/UserSlice';
 
 const Signup = () => {
     const navigate = useNavigate();
@@ -20,25 +21,33 @@ const Signup = () => {
         theme: "dark"
     }
 
+    const{loading,error} = useSelector((state) => state.user);
+
+    useEffect(() => {
+        if (error) {
+          toast.error(error, toastOptions);
+          dispatch(clearError());
+        }
+      }, [error,clearError]);
+
+    const dispatch = useDispatch();
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(handleValidation()){
-            const config = {
-                headers: {
-                    "Content-Type": "application/json",
-                }
-            }
-            await axios.post(signupRoute,{
+            let userCredentials = {
                 name,
                 email,
                 password
-            },config).then(
-                (data) => {
-                    toast.success("Successfully Logged In",toastOptions);
-                    navigate("/")
-                }).catch((err) => {
-                 toast.error(err.response.data.message,toastOptions);
+            }
+            dispatch(signupUser(userCredentials)).then((result)=>{
+                if(result.payload){
+                    setName("");
+                    setEmail("");
+                    setPassword("");
+                    navigate("/");
+                }
             });
+
         }
     };
 
