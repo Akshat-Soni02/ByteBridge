@@ -13,7 +13,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     email,
     password,
   });
-  
+
   sendToken(user, 201, res);
 });
 
@@ -72,39 +72,46 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   if (!user) {
     return next(new ErrorHandler("User not found with this email", 404));
   }
-
-  // Get reset token
-  const resetToken = user.getResetPasswordToken();
-
-  await user.save({ validateBeforeSave: false });
-
-  // Create reset password url
-  const resetUrl = `${req.protocol}://${req.get(
-    "host"
-    )}/password/reset/${resetToken}`;
-
-  const message = `Your password reset token is as follow:\n\n${resetUrl}\n\nIf you have not requested this email, then ignore it.`;
-
+  const otp = user.generateOTP();
   try {
     await sendEmail({
       email: user.email,
-      subject: "OnlineJudge Password Recovery",
-      message,
+      subject: "OTP Verification",
+      text: `Your OTP for Reseting your Password is ${otp}`,
     });
-
     res.status(200).json({
       success: true,
-      message: `Email sent to: ${user.email}`,
+      message: `Email sent to ${user.email}`,
     });
   } catch (error) {
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
-
+    user.otp = undefined;
     await user.save({ validateBeforeSave: false });
-
     return next(new ErrorHandler(error.message, 500));
   }
 });
+
+//verify otp
+exports.verifyotp = catchAsyncErrors(async (req, res, next) => {
+  const { email,otp} = req.body;
+  const user = await User.findOne({
+    email
+  });
+
+  const resetToken = user.getResetPasswordToken();
+  await user.save({ validateBeforeSave: false });
+
+
+  if(user.otp!=otp){
+      return next(new ErrorHandler("OTP is not correct",404))
+  }
+
+  res.status(200).json({
+      success : true,
+      token : resetToken,
+  })
+})
 
 // Reset Password => /api/v1/password/reset/:token
 exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
@@ -134,7 +141,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 
   // Setup new password
   user.password = req.body.password;
-
+  user.otp = undefined
   user.resetPasswordToken = undefined;
   user.resetPasswordExpire = undefined;
 
@@ -158,4 +165,3 @@ exports.updatePassword = catchAsyncErrors(async (req, res, next) => {
 
   sendToken(user, 200, res);
 });
-
