@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/otp.css';
+import '../../styles/otp.css';
 
 const Otp = () => {
     const[otp,setOtp] = useState("");
